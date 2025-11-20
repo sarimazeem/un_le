@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Rotating Mapbox Globe</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <!-- ___________________________________________________________________________________ -->
+    <!-- Mapbox GL JS -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.17.0-beta.1/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.17.0-beta.1/mapbox-gl.js"></script>
+    <link rel="stylesheet" href="template/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <!-- ___________________________________________________________________________________ -->
+</head>
+
+<body>
+    <div id="map"></div>
+    <div id="top-header">
+        <h1>LifeAtlas – Global Life Expectancy Portal - 1991-2023</h1>
+        <img src="data/logo.svg"><img>
+    </div>
+    <!--________________________________________-->
+    <!-- Map Animation Controller -->
+    <div class="controls">
+
+        <div class="top-row">
+            <button id="playPauseButton"><i class="fas fa-play"></i></button>
+            <div id="yearDisplay" style="font-weight:bold; margin-bottom:5px; text-align:center;">1991</div>
+            <input type="range" id="slider" min="0" max="32" value="0">
+        </div>
+
+        <!-- LEGEND IS NOW ITS OWN ROW -->
+        <div class="legend-row">
+            <div class="legend-container">
+                <div class="legend-bar">
+                    <div class="legend-box" style="background:#d73027;"></div>
+                    <div class="legend-box" style="background:#fc8d59;"></div>
+                    <div class="legend-box" style="background:#fee08b;"></div>
+                    <div class="legend-box" style="background:#d9ef8b;"></div>
+                    <div class="legend-box" style="background:#91cf60;"></div>
+                    <div class="legend-box" style="background:#1a9850;"></div>
+                    <div class="legend-box" style="background:#66c2a5;"></div>
+                    <div class="legend-box" style="background:#3288bd;"></div>
+                    <div class="legend-box" style="background:#5e4fa2;"></div>
+                    <div class="legend-box" style="background:#9e0142;"></div>
+                </div>
+
+                <div class="legend-labels">
+                    <span>40</span><span>45</span><span>50</span><span>55</span><span>60</span>
+                    <span>65</span><span>70</span><span>75</span><span>80</span><span>85</span>
+                    <span>/years</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+    <!-- ___________________________________________________________________________________     -->
+    <script src="data/LE_UN.js"></script>
+    <script src="template/script.js"></script>
+
+</body>
+
+</html>
