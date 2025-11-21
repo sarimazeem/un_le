@@ -91,7 +91,7 @@ playPauseButton.addEventListener("click", () => {
             slider.value = currentSelectedIndex;
             showLayer(layerIndex);
             updateYearDisplay(layerIndex);
-        }, 1000);
+        }, 3000);
     } else {
         clearInterval(interval);
     }
