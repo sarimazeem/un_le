@@ -1,47 +1,40 @@
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2FyaW0yNDAiLCJhIjoiY2xxbnZhbGNtMWNtZzJrcDl2amk5bndjbiJ9.K-VQe8qVvIij9URoQR0WaA';
-//_______________________________________________________________________________________________ā
+
 // Initialize map
 const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/satellite-streets-v12',
-    center: [0, 0], // Centered on the Netherlands
+    center: [0, 0],
     zoom: 1.4,
     projection: 'mercator'
 });
 
+// Selected years for the analysis
+const selectedYears = [1991, 2001, 2011, 2021, 2023];
+const startYear = 1991;
+const sliderLayers = Array.from({ length: 2023 - startYear + 1 }, (_, i) => `le_${startYear + i}`);
 
-
-//__________________________________________________________________________
-// _______________________________
-// Slider & Year Setup
-// _______________________________
-const yearDisplay = document.getElementById("yearDisplay");
 const slider = document.getElementById("slider");
 const playPauseButton = document.getElementById("playPauseButton");
-
-const startYear = 1991;
-const endYear = 2023;
-const sliderLayers = Array.from({ length: endYear - startYear + 1 }, (_, i) => `le_${startYear + i}`);
+const yearDisplay = document.getElementById("yearDisplay");
 
 slider.min = 0;
-slider.max = sliderLayers.length - 1;
+slider.max = selectedYears.length - 1; // 0..4
 slider.value = 0;
 
-// _______________________________
-// Map Load & Layer Setup
-// _______________________________
 let firstSymbolId;
 let isPlaying = false;
 let interval;
+let currentSelectedIndex = 0;
 
 map.on("load", () => {
-    // Find first symbol layer for proper layer ordering
-    const layers = map.getStyle().layers;
-    firstSymbolId = layers.find(layer => layer.type === "symbol")?.id;
+    // Find first symbol layer for proper ordering
+    firstSymbolId = map.getStyle().layers.find(layer => layer.type === "symbol")?.id;
 
     // Add GeoJSON source
     map.addSource("lifeExp", { type: "geojson", data: le_un });
-    // Add fill layers for each year
+
+    // Add fill layers for all years
     sliderLayers.forEach(yearField => {
         map.addLayer({
             id: yearField,
@@ -52,8 +45,7 @@ map.on("load", () => {
                     "interpolate",
                     ["linear"],
                     ["get", yearField],
-
-                    40, "#f7fbff",   // very low – very light blue
+                    40, "#f7fbff",
                     45, "#deebf7",
                     50, "#c6dbef",
                     55, "#9ecae1",
@@ -63,17 +55,15 @@ map.on("load", () => {
                     75, "#08519c",
                     80, "#08306b",
                     85, "#041C3C"
-                ],   // ← MISSING COMMA WAS HERE
-
+                ],
                 "fill-opacity": 0.9,
-                "fill-opacity-transition": { duration: 800 } // smooth fade
+                "fill-opacity-transition": { duration: 800 }
             },
             layout: { visibility: "visible" }
         }, firstSymbolId);
     });
 
-
-    // Add white outline layer
+    // Add white outline
     map.addLayer({
         id: "lifeExp-outline",
         type: "line",
@@ -82,70 +72,63 @@ map.on("load", () => {
             "line-color": "#ffffff",
             "line-width": 1.5
         }
-    }, firstSymbolId); // ensures outline is below labels but above fills
+    }, firstSymbolId);
 
-    // Show initial year
-    updateYearDisplay(slider.value);
+    // Show initial selected year
+    showLayer(selectedYears[0] - startYear);
+    updateYearDisplay(selectedYears[0] - startYear);
 });
 
-// _______________________________
-// Play/Pause Animation
-// _______________________________
+// Play/Pause Button
 playPauseButton.addEventListener("click", () => {
     isPlaying = !isPlaying;
     playPauseButton.innerHTML = isPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
 
     if (isPlaying) {
         interval = setInterval(() => {
-            advanceSlider();
+            currentSelectedIndex = (currentSelectedIndex + 1) % selectedYears.length;
+            const layerIndex = selectedYears[currentSelectedIndex] - startYear;
+            slider.value = currentSelectedIndex;
+            showLayer(layerIndex);
+            updateYearDisplay(layerIndex);
         }, 1000);
     } else {
         clearInterval(interval);
     }
 });
 
-// _______________________________
 // Slider Input Event
-// _______________________________
 slider.addEventListener("input", () => {
-    showLayer(slider.value);
-    updateYearDisplay(slider.value);
+    currentSelectedIndex = parseInt(slider.value);
+    const layerIndex = selectedYears[currentSelectedIndex] - startYear;
+    showLayer(layerIndex);
+    updateYearDisplay(layerIndex);
 });
 
-// _______________________________
-// Helper Functions
-// _______________________________
-
-function advanceSlider() {
-    let currentVal = parseInt(slider.value);
-    slider.value = (currentVal + 1) % sliderLayers.length; // wrap around
-    showLayer(slider.value);
-    updateYearDisplay(slider.value);
-}
-
+// Show only the selected layer
 function showLayer(index) {
     sliderLayers.forEach((layer, i) => {
-        map.setPaintProperty(layer, "fill-opacity", i === parseInt(index) ? 0.9 : 0);
+        map.setPaintProperty(layer, "fill-opacity", i === index ? 0.9 : 0);
     });
 }
 
+// Update year display with fade effect
 function updateYearDisplay(index) {
-    const year = startYear + parseInt(index);
-    // fade out
+    const year = startYear + index;
     yearDisplay.style.opacity = 0;
     setTimeout(() => {
-        // update text when invisible
         yearDisplay.textContent = year;
-        // fade in
         yearDisplay.style.opacity = 1;
-    }, 200); // half of your CSS transition time
+    }, 200);
 }
+
+// Compass rotation
 map.on("rotate", () => {
     const angle = -map.getBearing();
-    document.getElementById("compassSVG").style.transform =
-        `rotate(${angle}deg)`;
+    document.getElementById("compassSVG").style.transform = `rotate(${angle}deg)`;
 });
 
+// Add scale control
 map.addControl(
     new mapboxgl.ScaleControl({ maxWidth: 120, unit: 'metric' }),
     'top-right'
