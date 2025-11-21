@@ -41,7 +41,6 @@ map.on("load", () => {
 
     // Add GeoJSON source
     map.addSource("lifeExp", { type: "geojson", data: le_un });
-
     // Add fill layers for each year
     sliderLayers.forEach(yearField => {
         map.addLayer({
@@ -53,24 +52,26 @@ map.on("load", () => {
                     "interpolate",
                     ["linear"],
                     ["get", yearField],
-                    40, "#d73027",
-                    45, "#fc8d59",
-                    50, "#fee08b",
-                    55, "#d9ef8b",
-                    60, "#91cf60",
-                    65, "#1a9850",
-                    70, "#66c2a5",
-                    75, "#3288bd",
-                    80, "#5e4fa2",
-                    85, "#9e0142"
-                ],
-                "fill-opacity": 0.9,
-                "fill-opacity-transition": { duration: 800 }  // 👈 SLOW FADE
 
+                    40, "#f7fbff",   // very low – very light blue
+                    45, "#deebf7",
+                    50, "#c6dbef",
+                    55, "#9ecae1",
+                    60, "#6baed6",
+                    65, "#4292c6",
+                    70, "#2171b5",
+                    75, "#08519c",
+                    80, "#08306b",
+                    85, "#041C3C"
+                ],   // ← MISSING COMMA WAS HERE
+
+                "fill-opacity": 0.9,
+                "fill-opacity-transition": { duration: 800 } // smooth fade
             },
             layout: { visibility: "visible" }
         }, firstSymbolId);
     });
+
 
     // Add white outline layer
     map.addLayer({
@@ -139,3 +140,13 @@ function updateYearDisplay(index) {
         yearDisplay.style.opacity = 1;
     }, 200); // half of your CSS transition time
 }
+map.on("rotate", () => {
+    const angle = -map.getBearing();
+    document.getElementById("compassSVG").style.transform =
+        `rotate(${angle}deg)`;
+});
+
+map.addControl(
+    new mapboxgl.ScaleControl({ maxWidth: 120, unit: 'metric' }),
+    'top-right'
+);

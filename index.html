@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Rotating Mapbox Globe</title>
+    <title>UN Life Expectancy</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
     <!-- ___________________________________________________________________________________ -->
     <!-- Mapbox GL JS -->
@@ -23,38 +23,81 @@
     <!--________________________________________-->
     <!-- Map Animation Controller -->
     <div class="controls">
-
         <div class="top-row">
             <button id="playPauseButton"><i class="fas fa-play"></i></button>
             <div id="yearDisplay" style="font-weight:bold; margin-bottom:5px; text-align:center;">1991</div>
             <input type="range" id="slider" min="0" max="32" value="0">
         </div>
+    </div>
+    <!--__________________________________________-->
+    <div id="side-legend">
+        <h3>Life Expectancy<br> (Years)</h3>
 
-        <!-- LEGEND IS NOW ITS OWN ROW -->
-        <div class="legend-row">
-            <div class="legend-container">
-                <div class="legend-bar">
-                    <div class="legend-box" style="background:#d73027;"></div>
-                    <div class="legend-box" style="background:#fc8d59;"></div>
-                    <div class="legend-box" style="background:#fee08b;"></div>
-                    <div class="legend-box" style="background:#d9ef8b;"></div>
-                    <div class="legend-box" style="background:#91cf60;"></div>
-                    <div class="legend-box" style="background:#1a9850;"></div>
-                    <div class="legend-box" style="background:#66c2a5;"></div>
-                    <div class="legend-box" style="background:#3288bd;"></div>
-                    <div class="legend-box" style="background:#5e4fa2;"></div>
-                    <div class="legend-box" style="background:#9e0142;"></div>
-                </div>
-
-                <div class="legend-labels">
-                    <span>40</span><span>45</span><span>50</span><span>55</span><span>60</span>
-                    <span>65</span><span>70</span><span>75</span><span>80</span><span>85</span>
-                    <span>/years</span>
-                </div>
-            </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background:#f7fbff;"></span>
+            <span class="legend-label">40–45</span>
         </div>
 
+        <div class="legend-item">
+            <span class="legend-color" style="background:#deebf7;"></span>
+            <span class="legend-label">45–50</span>
+        </div>
+
+        <div class="legend-item">
+            <span class="legend-color" style="background:#c6dbef;"></span>
+            <span class="legend-label">50–55</span>
+        </div>
+
+        <div class="legend-item">
+            <span class="legend-color" style="background:#9ecae1;"></span>
+            <span class="legend-label">55–60</span>
+        </div>
+
+        <div class="legend-item">
+            <span class="legend-color" style="background:#6baed6;"></span>
+            <span class="legend-label">60–65</span>
+        </div>
+
+        <div class="legend-item">
+            <span class="legend-color" style="background:#4292c6;"></span>
+            <span class="legend-label">65–70</span>
+        </div>
+
+        <div class="legend-item">
+            <span class="legend-color" style="background:#2171b5;"></span>
+            <span class="legend-label">70–75</span>
+        </div>
+
+        <div class="legend-item">
+            <span class="legend-color" style="background:#08519c;"></span>
+            <span class="legend-label">75–80</span>
+        </div>
+
+        <div class="legend-item">
+            <span class="legend-color" style="background:#08306b;"></span>
+            <span class="legend-label">80–85</span>
+        </div>
+
+        <div class="legend-item">
+            <span class="legend-color" style="background:#041C3C;"></span>
+            <span class="legend-label">85+</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background:#000000;"></span>
+            <span class="legend-label">No Data</span>
+        </div>
     </div>
+    <!--__________________________________________________________-->
+    <div id="compassControl">
+        <svg id="compassSVG" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="45" fill="white" stroke="black" stroke-width="3" />
+            <text x="50" y="28" text-anchor="middle" font-size="28" font-weight="bold">N</text>
+            <text x="80" y="62" text-anchor="middle" font-size="28" font-weight="bold">E</text>
+            <text x="50" y="88" text-anchor="middle" font-size="28" font-weight="bold">S</text>
+            <text x="20" y="62" text-anchor="middle" font-size="28" font-weight="bold">W</text>
+        </svg>
+    </div>
+
 
 
 
